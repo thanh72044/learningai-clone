@@ -1,100 +1,76 @@
+'use client';
+
+import { motion } from 'framer-motion';
 import { SectionHeader } from '@/components/ui/section-header';
 
-const LEVELS = [
+const STEPS = [
   {
-    code: 'L1',
-    name: 'Cơ Bản',
-    duration: '4-6 tuần',
-    color: 'border-green-500 bg-green-500/10 text-green-400',
-    dotColor: 'bg-green-500',
-    courses: ['AI Foundation', 'Prompt Engineering', 'ChatGPT cho công việc'],
+    step: '01',
+    icon: '🔍',
+    title: 'Chọn Khóa Học',
+    desc: 'Khám phá thư viện khóa học được phân cấp rõ ràng. Từ AI cơ bản đến Agentic AI — chọn lộ trình phù hợp với mục tiêu của bạn.',
   },
   {
-    code: 'L2',
-    name: 'Trung Cấp',
-    duration: '8-10 tuần',
-    color: 'border-blue-500 bg-blue-500/10 text-blue-400',
-    dotColor: 'bg-blue-500',
-    courses: ['AI for Marketing', 'AI for Sales', 'Workflow Automation'],
+    step: '02',
+    icon: '🎓',
+    title: 'Học & Thực Hành',
+    desc: 'Học qua video thực chiến, bài tập có hướng dẫn và dự án thực tế. Cộng đồng hỗ trợ bạn 24/7 trong suốt quá trình.',
   },
   {
-    code: 'L3',
-    name: 'Chuyên Sâu',
-    duration: '12-16 tuần',
-    color: 'border-orange-500 bg-orange-500/10 text-orange-400',
-    dotColor: 'bg-orange-500',
-    courses: ['Agentic AI', 'AI Workflows nâng cao', 'Xây dựng AI Solutions'],
-  },
-  {
-    code: 'L4',
-    name: 'Developer',
-    duration: '16+ tuần',
-    color: 'border-purple-500 bg-purple-500/10 text-purple-400',
-    dotColor: 'bg-purple-500',
-    courses: ['AI for Developers', 'Multi-Agent Systems', 'Production AI Apps'],
+    step: '03',
+    icon: '🚀',
+    title: 'Áp Dụng & Bứt Phá',
+    desc: 'Nhận chứng chỉ được công nhận và áp dụng kiến thức vào công việc ngay. Tăng năng suất, thăng tiến sự nghiệp với AI.',
   },
 ];
 
-/** L1–L4 learning roadmap with horizontal stepper */
+/** "How It Works" 3-step vertical timeline with scroll-triggered animations */
 export function RoadmapSection() {
   return (
     <section className="py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          title="Lộ Trình Học AI"
-          subtitle="Từ người mới đến AI Engineer — 4 cấp độ được thiết kế khoa học"
-        />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <SectionHeader
+            title="Bắt Đầu Chỉ 3 Bước"
+            subtitle="Hành trình làm chủ AI của bạn đơn giản hơn bạn nghĩ"
+          />
+        </motion.div>
 
-        {/* Desktop: horizontal stepper */}
-        <div className="hidden md:flex items-start gap-0 mb-8">
-          {LEVELS.map((level, i) => (
-            <div key={level.code} className="flex-1 flex items-start gap-0">
-              {/* Card */}
-              <div className={`flex-1 rounded-2xl border p-6 ${level.color}`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl font-bold">{level.code}</span>
-                  <div>
-                    <p className="font-semibold text-white">{level.name}</p>
-                    <p className="text-xs text-white/40">{level.duration}</p>
-                  </div>
+        <div className="relative flex flex-col gap-0">
+          {STEPS.map((step, i) => (
+            <motion.div
+              key={step.step}
+              className="relative flex gap-6 pb-12 last:pb-0"
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.55, delay: i * 0.15, ease: 'easeOut' }}
+            >
+              {/* Left: number circle + connecting line */}
+              <div className="flex flex-col items-center shrink-0">
+                <div className="w-12 h-12 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 flex items-center justify-center text-emerald-400 font-bold text-sm z-10">
+                  {step.step}
                 </div>
-                <ul className="space-y-1.5">
-                  {level.courses.map((c) => (
-                    <li key={c} className="text-sm text-white/70 flex items-center gap-2">
-                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${level.dotColor}`} />
-                      {c}
-                    </li>
-                  ))}
-                </ul>
+                {/* Connecting line — hidden on last step */}
+                {i < STEPS.length - 1 && (
+                  <div className="w-px flex-1 mt-2 bg-emerald-500/20" />
+                )}
               </div>
-              {/* Arrow connector */}
-              {i < LEVELS.length - 1 && (
-                <div className="flex items-center self-center px-2 text-white/20 text-2xl">→</div>
-              )}
-            </div>
-          ))}
-        </div>
 
-        {/* Mobile: vertical list */}
-        <div className="md:hidden flex flex-col gap-4">
-          {LEVELS.map((level) => (
-            <div key={level.code} className={`rounded-2xl border p-5 ${level.color}`}>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-xl font-bold">{level.code}</span>
-                <div>
-                  <p className="font-semibold text-white">{level.name}</p>
-                  <p className="text-xs text-white/40">{level.duration}</p>
+              {/* Right: content card */}
+              <div className="flex-1 pt-2 pb-4">
+                <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/60 p-6 hover:border-emerald-500/40 transition-colors">
+                  <span className="text-3xl mb-3 block">{step.icon}</span>
+                  <h3 className="text-white font-bold text-xl mb-2">{step.title}</h3>
+                  <p className="text-white/60 text-sm leading-relaxed">{step.desc}</p>
                 </div>
               </div>
-              <ul className="space-y-1">
-                {level.courses.map((c) => (
-                  <li key={c} className="text-sm text-white/70 flex items-center gap-2">
-                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${level.dotColor}`} />
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

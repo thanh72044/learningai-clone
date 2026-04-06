@@ -124,6 +124,7 @@ export type Database = {
           duration_minutes: number | null;
           sort_order: number;
           is_preview: boolean;
+          is_final_exam: boolean;
           created_at: string;
         };
         Insert: {
@@ -134,6 +135,7 @@ export type Database = {
           duration_minutes?: number | null;
           sort_order: number;
           is_preview?: boolean;
+          is_final_exam?: boolean;
           created_at?: string;
         };
         Update: {
@@ -144,6 +146,7 @@ export type Database = {
           duration_minutes?: number | null;
           sort_order?: number;
           is_preview?: boolean;
+          is_final_exam?: boolean;
           created_at?: string;
         };
       };
@@ -280,6 +283,110 @@ export type Database = {
           created_at?: string;
         };
       };
+      quiz_questions: {
+        Row: {
+          id: string;
+          lesson_id: string;
+          question_text: string;
+          explanation: string | null;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          lesson_id: string;
+          question_text: string;
+          explanation?: string | null;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          lesson_id?: string;
+          question_text?: string;
+          explanation?: string | null;
+          sort_order?: number;
+          created_at?: string;
+        };
+      };
+      quiz_options: {
+        Row: {
+          id: string;
+          question_id: string;
+          option_text: string;
+          is_correct: boolean;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          question_id: string;
+          option_text: string;
+          is_correct?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          question_id?: string;
+          option_text?: string;
+          is_correct?: boolean;
+          sort_order?: number;
+          created_at?: string;
+        };
+      };
+      quiz_attempts: {
+        Row: {
+          id: string;
+          user_id: string;
+          question_id: string;
+          selected_option_id: string;
+          is_correct: boolean;
+          attempted_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          question_id: string;
+          selected_option_id: string;
+          is_correct: boolean;
+          attempted_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          question_id?: string;
+          selected_option_id?: string;
+          is_correct?: boolean;
+          attempted_at?: string;
+        };
+      };
+      quiz_scores: {
+        Row: {
+          id: string;
+          user_id: string;
+          lesson_id: string;
+          score_percent: number;
+          passed: boolean;
+          completed_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          lesson_id: string;
+          score_percent: number;
+          passed: boolean;
+          completed_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          lesson_id?: string;
+          score_percent?: number;
+          passed?: boolean;
+          completed_at?: string;
+        };
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -297,3 +404,12 @@ export type Certificate = Database['public']['Tables']['certificates']['Row'];
 export type Testimonial = Database['public']['Tables']['testimonials']['Row'];
 export type FreeResource = Database['public']['Tables']['free_resources']['Row'];
 export type Instructor = Database['public']['Tables']['instructors']['Row'];
+export type QuizQuestion = Database['public']['Tables']['quiz_questions']['Row'];
+export type QuizOption = Database['public']['Tables']['quiz_options']['Row'];
+export type QuizAttempt = Database['public']['Tables']['quiz_attempts']['Row'];
+export type QuizScore = Database['public']['Tables']['quiz_scores']['Row'];
+
+/** Quiz question with its options (used when rendering the quiz UI) */
+export type QuizQuestionWithOptions = QuizQuestion & {
+  quiz_options: QuizOption[];
+};

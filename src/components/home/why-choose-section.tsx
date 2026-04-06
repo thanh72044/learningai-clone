@@ -1,3 +1,7 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 import { SectionHeader } from '@/components/ui/section-header';
 import { Card } from '@/components/ui/card';
 
@@ -10,24 +14,51 @@ const REASONS = [
   { icon: '📱', title: 'Học Mọi Lúc, Mọi Nơi', desc: 'Truy cập mọi thiết bị, học theo tốc độ của bạn, không giới hạn thời gian.' },
 ];
 
-/** 6 value proposition cards */
+// Reusable stagger variants
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
+/** 6 value proposition cards with staggered scroll-triggered entrance */
 export function WhyChooseSection() {
   return (
     <section className="py-20 bg-emerald-950/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          title="Tại Sao Chọn LearningAI?"
-          subtitle="Chúng tôi không chỉ dạy lý thuyết — chúng tôi giúp bạn làm chủ AI trong thực tế"
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <SectionHeader
+            title="Tại Sao Chọn LearningAI?"
+            subtitle="Chúng tôi không chỉ dạy lý thuyết — chúng tôi giúp bạn làm chủ AI trong thực tế"
+          />
+        </motion.div>
+
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+        >
           {REASONS.map((r) => (
-            <Card key={r.title} glass className="p-6 flex flex-col gap-3">
-              <span className="text-4xl">{r.icon}</span>
-              <h3 className="text-white font-semibold text-lg">{r.title}</h3>
-              <p className="text-white/55 text-sm leading-relaxed">{r.desc}</p>
-            </Card>
+            <motion.div key={r.title} variants={cardVariants}>
+              <Card glass className="p-6 flex flex-col gap-3 h-full">
+                <span className="text-4xl">{r.icon}</span>
+                <h3 className="text-white font-semibold text-lg">{r.title}</h3>
+                <p className="text-white/55 text-sm leading-relaxed">{r.desc}</p>
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

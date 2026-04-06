@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="vi" className={geist.variable}>
       <body className="min-h-screen flex flex-col bg-emerald-950 text-white antialiased">
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 page-enter">{children}</main>
         <SiteFooter />
       </body>
     </html>

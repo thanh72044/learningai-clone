@@ -18,7 +18,7 @@ function formatVND(amount: number) {
 export function CourseCard({ course }: CourseCardProps) {
   return (
     <Link href={`/course/${course.slug}`}>
-      <Card className="group overflow-hidden h-full flex flex-col cursor-pointer">
+      <Card className="group card-hover overflow-hidden h-full flex flex-col cursor-pointer">
         {/* Thumbnail */}
         <div className="relative w-full aspect-video bg-emerald-900/50 overflow-hidden">
           {course.thumbnail_url ? (

@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { signupAction } from '../actions';
 import { Button } from '@/components/ui/button';
+import { createClient } from '@/lib/supabase/client';
 
 /** Email/password sign-up form */
 export default function SignupPage() {
@@ -18,28 +19,25 @@ export default function SignupPage() {
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
-    if (password.length < 6) {
-      setError('Mật khẩu phải có ít nhất 6 ký tự.');
-      return;
-    }
     setLoading(true);
     setError('');
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+    const formData = new FormData();
+    formData.append('full_name', fullName);
+    formData.append('email', email);
+    formData.append('password', password);
 
-    if (error) {
-      setError(error.message);
+    const result = await signupAction(formData);
+
+    if (result.error === 'EMAIL_EXISTS') {
+      setError('Email đã được đăng ký. Vui lòng quay lại trang đăng nhập.');
+      setLoading(false);
+    } else if (result.error) {
+      setError(result.error);
       setLoading(false);
     } else {
       setSent(true);
+      setLoading(false);
     }
   }
 
@@ -135,7 +133,16 @@ export default function SignupPage() {
               />
             </div>
 
-            {error && <p className="text-red-400 text-sm">{error}</p>}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+                <p className="text-red-400 text-sm">{error}</p>
+                {error.includes('đã được đăng ký') && (
+                  <Link href="/auth/login" className="text-emerald-400 text-xs hover:underline mt-1 block">
+                    Đến trang đăng nhập ngay →
+                  </Link>
+                )}
+              </div>
+            )}
 
             <Button type="submit" variant="primary" size="md" disabled={loading} className="w-full mt-1">
               {loading ? 'Đang tạo tài khoản...' : 'Đăng Ký Miễn Phí'}
