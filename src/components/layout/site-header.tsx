@@ -123,7 +123,7 @@ export function SiteHeader() {
           <div className="flex gap-3 pt-2 border-t border-white/10">
             {user ? (
               <>
-                <Link href="/dashboard" className="flex-1">
+                <Link href="/dashboard" className="flex-1" onClick={() => setMobileOpen(false)}>
                   <Button variant="outline" size="sm" className="w-full">Dashboard</Button>
                 </Link>
                 <button
@@ -135,10 +135,10 @@ export function SiteHeader() {
               </>
             ) : (
               <>
-                <Link href="/auth/login" className="flex-1">
+                <Link href="/auth/login" className="flex-1" onClick={() => setMobileOpen(false)}>
                   <Button variant="outline" size="sm" className="w-full">Đăng Nhập</Button>
                 </Link>
-                <Link href="/auth/signup" className="flex-1">
+                <Link href="/auth/signup" className="flex-1" onClick={() => setMobileOpen(false)}>
                   <Button variant="primary" size="sm" className="w-full">Đăng Ký</Button>
                 </Link>
               </>

@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { Geist } from 'next/font/google';
+import { Geist, Geist_Mono } from 'next/font/google';
 import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import './globals.css';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist-sans' });
+const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' });
 
 export const metadata: Metadata = {
   title: {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" className={geist.variable}>
+    <html lang="vi" className={`${geist.variable} ${geistMono.variable}`}>
       <body className="min-h-screen flex flex-col bg-emerald-950 text-white antialiased">
         <SiteHeader />
         <main className="flex-1 page-enter">{children}</main>

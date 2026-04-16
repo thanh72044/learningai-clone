@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/auth/get-user';
 import { getUserEnrollments } from '@/lib/db/enrollments';
 import { getCourseProgress } from '@/lib/db/progress';
@@ -15,7 +16,7 @@ async function getCertificateCount(userId: string) {
 
 export default async function DashboardPage() {
   const user = await getUser();
-  if (!user) return null;
+  if (!user) redirect('/auth/login');
 
   const [enrollments, certCount] = await Promise.all([
     getUserEnrollments(user.id),

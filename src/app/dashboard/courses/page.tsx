@@ -1,11 +1,12 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/auth/get-user';
 import { getUserEnrollments } from '@/lib/db/enrollments';
 import { getCourseProgress } from '@/lib/db/progress';
 
 export default async function DashboardCoursesPage() {
   const user = await getUser();
-  if (!user) return null;
+  if (!user) redirect('/auth/login');
 
   const enrollments = await getUserEnrollments(user.id);
 
