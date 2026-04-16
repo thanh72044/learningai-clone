@@ -7,19 +7,18 @@ import type { Lesson } from '@/types/database.types';
 interface LessonListProps {
   lessons: Lesson[];
   completedLessonIds: string[];
-  userId: string;
   courseId: string;
 }
 
 /** Interactive lesson list with mark-complete toggle */
-export function LessonList({ lessons, completedLessonIds, userId, courseId }: LessonListProps) {
+export function LessonList({ lessons, completedLessonIds, courseId }: LessonListProps) {
   const [completed, setCompleted] = useState(new Set(completedLessonIds));
   const [isPending, startTransition] = useTransition();
 
   function toggleComplete(lessonId: string) {
     if (completed.has(lessonId)) return; // No un-complete
     startTransition(async () => {
-      await markLessonCompleteAction(userId, lessonId, courseId);
+      await markLessonCompleteAction(lessonId, courseId);
       setCompleted((prev) => new Set([...prev, lessonId]));
     });
   }

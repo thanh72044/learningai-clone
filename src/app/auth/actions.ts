@@ -24,10 +24,9 @@ export async function signupAction(formData: FormData) {
     return { error: 'Mật khẩu phải có ít nhất 6 ký tự.' };
   }
 
-  // Check if user already exists using the RPC function
-  // We use the regular createClient (anon) because RPC security is handled by 'SECURITY DEFINER'
-  const supabase = await createClient();
-  const { data: userExists, error: checkError } = await supabase.rpc('check_email_exists', {
+  // Check if user already exists using adminClient (service role) — anon access to this
+  // RPC is revoked in migration 007 to prevent unauthenticated email enumeration.
+  const { data: userExists, error: checkError } = await adminClient.rpc('check_email_exists', {
     email_to_check: email
   });
 
@@ -39,6 +38,7 @@ export async function signupAction(formData: FormData) {
   }
 
   // If not exists or RPC check skipped, proceed with signup
+  const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
     email,
     password,

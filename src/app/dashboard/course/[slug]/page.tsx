@@ -65,7 +65,6 @@ export default async function DashboardCoursePage({ params }: Props) {
       <LessonList
         lessons={lessons}
         completedLessonIds={Array.from(progress.completedLessonIds)}
-        userId={user.id}
         courseId={course.id}
       />
     </div>
