@@ -8,14 +8,15 @@ import { createClient } from '@/lib/supabase/server';
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? '/dashboard';
+  const rawNext = searchParams.get('next') ?? '/dashboard';
+
+  // Prevent open redirect: next must be a relative path (starts with / but not //)
+  const next = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/dashboard';
 
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      // If we're on a password reset flow, ensure we redirect to the reset form
-      const isPasswordReset = next.includes('/auth/reset-password');
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

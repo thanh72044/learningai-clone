@@ -4,9 +4,11 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { createCourseSchema, updateCourseSchema } from '@/lib/validations/admin';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 /** Create a new course from form data with Zod validation */
 export async function createCourseAction(formData: FormData) {
+  await requireAdmin();
   const supabase = await createClient();
 
   // Parse and validate with Zod
@@ -44,6 +46,7 @@ export async function createCourseAction(formData: FormData) {
 
 /** Update an existing course with Zod validation */
 export async function updateCourseAction(id: string, formData: FormData) {
+  await requireAdmin();
   const supabase = await createClient();
 
   // Parse and validate with Zod
@@ -80,6 +83,7 @@ export async function updateCourseAction(id: string, formData: FormData) {
 
 /** Delete a course by id */
 export async function deleteCourseAction(id: string) {
+  await requireAdmin();
   const supabase = await createClient();
   const { error } = await supabase.from('courses').delete().eq('id', id);
 

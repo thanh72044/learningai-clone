@@ -41,6 +41,7 @@ export async function submitQuizAction(
 
   // Calculate score percentage
   const correctCount = attempts.filter((a) => a.isCorrect).length;
+  if (attempts.length === 0) return { scorePercent: 0, passed: false, attempts };
   const scorePercent = Math.round((correctCount / attempts.length) * 100);
   const passed = scorePercent >= 70; // 70% pass threshold
 

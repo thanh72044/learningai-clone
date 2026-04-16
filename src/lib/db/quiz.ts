@@ -6,7 +6,7 @@ export async function getQuizQuestions(lessonId: string): Promise<QuizQuestionWi
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('quiz_questions')
-    .select('*, quiz_options(*)')
+    .select('*, quiz_options(id, question_id, option_text, sort_order)')
     .eq('lesson_id', lessonId)
     .order('sort_order', { ascending: true });
 
