@@ -61,9 +61,9 @@ export default async function EditLessonPage({ params }: Props) {
           <div>
             <label className={LABEL_CLASS}>Thời Lượng (giây)</label>
             <input
-              name="duration"
+              name="duration_minutes"
               type="number"
-              defaultValue={lesson.duration ?? 0}
+              defaultValue={lesson.duration_minutes ?? 0}
               min={0}
               className={FIELD_CLASS}
             />
@@ -83,9 +83,11 @@ export default async function EditLessonPage({ params }: Props) {
 
         <div>
           <label className="flex items-center gap-2 cursor-pointer">
+            <input type="hidden" name="is_preview" value="false" />
             <input
               name="is_preview"
               type="checkbox"
+              value="true"
               defaultChecked={lesson.is_preview ?? false}
               className="w-4 h-4 accent-emerald-500"
             />

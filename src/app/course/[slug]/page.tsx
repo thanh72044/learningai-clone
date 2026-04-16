@@ -24,10 +24,8 @@ function formatVND(amount: number) {
 
 export default async function CourseDetailPage({ params }: Props) {
   const { slug } = await params;
-  const [course, lessons] = await Promise.all([
-    getCourseBySlug(slug),
-    getCourseBySlug(slug).then((c) => c ? getLessonsByCourse(c.id) : []),
-  ]);
+  const course = await getCourseBySlug(slug);
+  const lessons = course ? await getLessonsByCourse(course.id) : [];
 
   if (!course) notFound();
 

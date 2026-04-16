@@ -34,11 +34,11 @@ export default function NewCoursePage() {
           </div>
           <div>
             <label className={LABEL_CLASS}>Giá Gốc (VNĐ)</label>
-            <input name="original_price" type="number" min={0} className={FIELD_CLASS} />
+            <input name="originalPrice" type="number" min={0} className={FIELD_CLASS} />
           </div>
           <div className="sm:col-span-2">
             <label className={LABEL_CLASS}>URL Thumbnail</label>
-            <input name="thumbnail_url" type="url" placeholder="https://..." className={FIELD_CLASS} />
+            <input name="thumbnailUrl" type="url" placeholder="https://..." className={FIELD_CLASS} />
           </div>
           <div className="sm:col-span-2">
             <label className={LABEL_CLASS}>Mô Tả</label>
@@ -48,11 +48,13 @@ export default function NewCoursePage() {
 
         <div className="flex gap-6">
           <label className="flex items-center gap-2 cursor-pointer">
-            <input name="is_published" type="checkbox" value="on" className="w-4 h-4 accent-emerald-500" />
+            <input type="hidden" name="isPublished" value="false" />
+            <input name="isPublished" type="checkbox" value="true" className="w-4 h-4 accent-emerald-500" />
             <span className="text-sm text-white/70">Xuất bản ngay</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
-            <input name="is_featured" type="checkbox" value="on" className="w-4 h-4 accent-emerald-500" />
+            <input type="hidden" name="isFeatured" value="false" />
+            <input name="isFeatured" type="checkbox" value="true" className="w-4 h-4 accent-emerald-500" />
             <span className="text-sm text-white/70">Nổi bật (homepage)</span>
           </label>
         </div>

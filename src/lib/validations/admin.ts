@@ -10,7 +10,7 @@ export const createCourseSchema = z.object({
     .regex(/^[a-z0-9-]+$/, 'Slug chỉ được chứa chữ thường, số và dấu gạch ngang'),
   title: z.string().min(1, 'Tiêu đề không được để trống'),
   description: z.string().optional(),
-  level: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
+  level: z.enum(['beginner', 'intermediate', 'advanced', 'developer']).optional(),
   price: z.coerce.number().int().nonnegative('Giá phải là số không âm'),
   originalPrice: z.coerce.number().int().nonnegative('Giá gốc phải là số không âm').optional(),
   thumbnailUrl: z.string().url('URL hình ảnh không hợp lệ').optional().or(z.literal('')),
@@ -27,9 +27,9 @@ export const createCourseSchema = z.object({
 export type CreateCourseFormValues = z.infer<typeof createCourseSchema>;
 
 /**
- * Course Update Validation Schema (same as create)
+ * Course Update Validation Schema (slug not required — edit form uses hidden input or disabled field)
  */
-export const updateCourseSchema = createCourseSchema;
+export const updateCourseSchema = createCourseSchema.omit({ slug: true });
 
 export type UpdateCourseFormValues = z.infer<typeof updateCourseSchema>;
 

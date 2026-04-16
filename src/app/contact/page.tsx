@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState } from 'react';
 import { Button } from '@/components/ui/button';
+import { submitContactAction } from './contact-actions';
 
 const CONTACT_INFO = [
   { icon: '📧', label: 'Email', value: 'contact@learning.ai.vn' },
@@ -9,18 +10,10 @@ const CONTACT_INFO = [
   { icon: '⏰', label: 'Hỗ trợ', value: '24/7 qua Discord & Email' },
 ];
 
-export default function ContactPage() {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+const initialState = { status: 'idle' as const };
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setStatus('sending');
-    // TODO: wire to Supabase insert or email service
-    await new Promise((r) => setTimeout(r, 800));
-    setStatus('sent');
-    setForm({ name: '', email: '', message: '' });
-  }
+export default function ContactPage() {
+  const [state, formAction, isPending] = useActionState(submitContactAction, initialState);
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -56,55 +49,54 @@ export default function ContactPage() {
 
         {/* Contact form */}
         <div>
-          {status === 'sent' ? (
+          {state.status === 'sent' ? (
             <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
               <p className="text-5xl mb-4">✅</p>
               <h3 className="text-white font-semibold text-lg mb-2">Gửi thành công!</h3>
               <p className="text-white/60 text-sm">Chúng tôi sẽ phản hồi trong vòng 24 giờ.</p>
-              <button
-                onClick={() => setStatus('idle')}
-                className="mt-4 text-emerald-400 text-sm hover:underline"
-              >
-                Gửi tin nhắn khác
-              </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form action={formAction} className="flex flex-col gap-4">
+              {state.status === 'error' && (
+                <p className="text-red-400 text-sm rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-2.5">
+                  {state.error}
+                </p>
+              )}
               <div>
-                <label className="block text-sm text-white/60 mb-1.5">Họ và tên</label>
+                <label htmlFor="contact-name" className="block text-sm text-white/60 mb-1.5">Họ và tên</label>
                 <input
+                  id="contact-name"
                   type="text"
+                  name="name"
                   required
-                  value={form.name}
-                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   placeholder="Nguyễn Văn A"
                   className="w-full bg-white/5 border border-white/20 rounded-xl px-4 py-2.5 text-white placeholder-white/30 focus:outline-none focus:border-emerald-500/50"
                 />
               </div>
               <div>
-                <label className="block text-sm text-white/60 mb-1.5">Email</label>
+                <label htmlFor="contact-email" className="block text-sm text-white/60 mb-1.5">Email</label>
                 <input
+                  id="contact-email"
                   type="email"
+                  name="email"
                   required
-                  value={form.email}
-                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   placeholder="email@example.com"
                   className="w-full bg-white/5 border border-white/20 rounded-xl px-4 py-2.5 text-white placeholder-white/30 focus:outline-none focus:border-emerald-500/50"
                 />
               </div>
               <div>
-                <label className="block text-sm text-white/60 mb-1.5">Tin nhắn</label>
+                <label htmlFor="contact-message" className="block text-sm text-white/60 mb-1.5">Tin nhắn</label>
                 <textarea
+                  id="contact-message"
+                  name="message"
                   required
                   rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
                   placeholder="Bạn cần hỗ trợ gì?"
                   className="w-full bg-white/5 border border-white/20 rounded-xl px-4 py-2.5 text-white placeholder-white/30 focus:outline-none focus:border-emerald-500/50 resize-none"
                 />
               </div>
-              <Button type="submit" variant="primary" size="md" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Đang gửi...' : 'Gửi Tin Nhắn'}
+              <Button type="submit" variant="primary" size="md" disabled={isPending}>
+                {isPending ? 'Đang gửi...' : 'Gửi Tin Nhắn'}
               </Button>
             </form>
           )}

@@ -44,7 +44,7 @@ export default async function NewLessonPage() {
 
           <div>
             <label className={LABEL_CLASS}>Thời Lượng (giây)</label>
-            <input name="duration" type="number" defaultValue={0} min={0} className={FIELD_CLASS} />
+            <input name="duration_minutes" type="number" defaultValue={0} min={0} className={FIELD_CLASS} />
           </div>
 
           <div>
@@ -55,7 +55,8 @@ export default async function NewLessonPage() {
 
         <div>
           <label className="flex items-center gap-2 cursor-pointer">
-            <input name="is_preview" type="checkbox" value="on" className="w-4 h-4 accent-emerald-500" />
+            <input type="hidden" name="is_preview" value="false" />
+            <input name="is_preview" type="checkbox" value="true" className="w-4 h-4 accent-emerald-500" />
             <span className="text-sm text-white/70">Cho xem thử miễn phí</span>
           </label>
         </div>
