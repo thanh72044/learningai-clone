@@ -48,7 +48,7 @@ export default async function AdminCoursesPage() {
                   <LevelBadge level={course.level} />
                 </td>
                 <td className="px-4 py-3 text-white/60 hidden md:table-cell">
-                  {course.student_count.toLocaleString()}
+                  {(course.student_count ?? 0).toLocaleString()}
                 </td>
                 <td className="px-4 py-3">
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${

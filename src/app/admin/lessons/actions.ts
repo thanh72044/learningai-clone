@@ -37,7 +37,7 @@ export async function createLessonAction(formData: FormData) {
   }
 
   revalidatePath('/admin/lessons');
-  revalidatePath('/course');
+  revalidatePath('/dashboard/course');
   redirect('/admin/lessons');
 }
 
@@ -71,6 +71,7 @@ export async function updateLessonAction(id: string, formData: FormData) {
   }
 
   revalidatePath('/admin/lessons');
+  revalidatePath('/dashboard/course');
   redirect('/admin/lessons');
 }
 
