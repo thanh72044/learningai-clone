@@ -58,28 +58,28 @@ ALTER TABLE quiz_attempts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE quiz_scores ENABLE ROW LEVEL SECURITY;
 
 -- quiz_questions: anyone can read, admins can manage
-CREATE POLICY IF NOT EXISTS "quiz_questions_select" ON quiz_questions FOR SELECT USING (true);
-CREATE POLICY IF NOT EXISTS "quiz_questions_admin" ON quiz_questions FOR ALL USING (
+CREATE POLICY "quiz_questions_select" ON quiz_questions FOR SELECT USING (true);
+CREATE POLICY "quiz_questions_admin" ON quiz_questions FOR ALL USING (
   EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'admin')
 );
 
 -- quiz_options: anyone can read, admins can manage
-CREATE POLICY IF NOT EXISTS "quiz_options_select" ON quiz_options FOR SELECT USING (true);
-CREATE POLICY IF NOT EXISTS "quiz_options_admin" ON quiz_options FOR ALL USING (
+CREATE POLICY "quiz_options_select" ON quiz_options FOR SELECT USING (true);
+CREATE POLICY "quiz_options_admin" ON quiz_options FOR ALL USING (
   EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'admin')
 );
 
 -- quiz_attempts: users own their data, admins can manage all
-CREATE POLICY IF NOT EXISTS "quiz_attempts_own_select" ON quiz_attempts FOR SELECT USING (user_id = (SELECT auth.uid()));
-CREATE POLICY IF NOT EXISTS "quiz_attempts_own_insert" ON quiz_attempts FOR INSERT WITH CHECK (user_id = (SELECT auth.uid()));
-CREATE POLICY IF NOT EXISTS "quiz_attempts_admin" ON quiz_attempts FOR ALL USING (
+CREATE POLICY "quiz_attempts_own_select" ON quiz_attempts FOR SELECT USING (user_id = (SELECT auth.uid()));
+CREATE POLICY "quiz_attempts_own_insert" ON quiz_attempts FOR INSERT WITH CHECK (user_id = (SELECT auth.uid()));
+CREATE POLICY "quiz_attempts_admin" ON quiz_attempts FOR ALL USING (
   EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'admin')
 );
 
 -- quiz_scores: users own their data, admins can manage all
-CREATE POLICY IF NOT EXISTS "quiz_scores_own_select" ON quiz_scores FOR SELECT USING (user_id = (SELECT auth.uid()));
-CREATE POLICY IF NOT EXISTS "quiz_scores_own_insert" ON quiz_scores FOR INSERT WITH CHECK (user_id = (SELECT auth.uid()));
-CREATE POLICY IF NOT EXISTS "quiz_scores_own_update" ON quiz_scores FOR UPDATE USING (user_id = (SELECT auth.uid()));
-CREATE POLICY IF NOT EXISTS "quiz_scores_admin" ON quiz_scores FOR ALL USING (
+CREATE POLICY "quiz_scores_own_select" ON quiz_scores FOR SELECT USING (user_id = (SELECT auth.uid()));
+CREATE POLICY "quiz_scores_own_insert" ON quiz_scores FOR INSERT WITH CHECK (user_id = (SELECT auth.uid()));
+CREATE POLICY "quiz_scores_own_update" ON quiz_scores FOR UPDATE USING (user_id = (SELECT auth.uid()));
+CREATE POLICY "quiz_scores_admin" ON quiz_scores FOR ALL USING (
   EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'admin')
 );
