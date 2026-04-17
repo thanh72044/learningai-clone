@@ -2,7 +2,7 @@
 
 -- D-M2: Prevent duplicate quiz submissions (score inflation vulnerability)
 -- Add UNIQUE constraint to quiz_attempts table to enforce one attempt per user per question
-ALTER TABLE quiz_attempts ADD CONSTRAINT IF NOT EXISTS unique_user_question UNIQUE(user_id, question_id);
+ALTER TABLE quiz_attempts ADD CONSTRAINT unique_user_question UNIQUE(user_id, question_id);
 
 -- D-M3: Add missing index on enrollments.course_id
 -- Admin queries filtering by course_id will full-scan without this
