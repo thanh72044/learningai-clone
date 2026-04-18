@@ -1,9 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Course } from '@/types/database.types';
 
-/** Fetch all featured published courses for homepage */
+/** Fetch all featured published courses for homepage. Falls back to all published if none featured. */
 export async function getFeaturedCourses(): Promise<Course[]> {
   const supabase = await createClient();
+
+  // Try to fetch featured courses first
   const { data, error } = await supabase
     .from('courses')
     .select('*')
@@ -13,7 +15,20 @@ export async function getFeaturedCourses(): Promise<Course[]> {
     .limit(6);
 
   if (error) { console.error('getFeaturedCourses:', error.message); return []; }
-  return data ?? [];
+
+  // If featured courses exist, return them
+  if (data && data.length > 0) return data;
+
+  // Fallback: fetch all published courses if no featured ones
+  const { data: allCourses, error: allError } = await supabase
+    .from('courses')
+    .select('*')
+    .eq('is_published', true)
+    .order('student_count', { ascending: false })
+    .limit(6);
+
+  if (allError) { console.error('getFeaturedCourses (fallback):', allError.message); return []; }
+  return allCourses ?? [];
 }
 
 /** Fetch all published courses for listing page */
