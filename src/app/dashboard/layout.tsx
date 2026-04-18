@@ -9,6 +9,9 @@ const NAV_ITEMS = [
   { href: '/courses', label: 'Khám Phá Thêm', icon: '🔍' },
 ];
 
+// Uses Supabase server client (auth check with getUser())
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser();
   if (!user) redirect('/auth/login');

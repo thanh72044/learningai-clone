@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: 'Tổng hợp các khóa học AI miễn phí chất lượng từ Google, Microsoft, Harvard và hơn thế nữa.',
 };
 
+// Uses Supabase server client which accesses cookies (auth session)
+export const dynamic = 'force-dynamic';
+
 const PROVIDER_COLORS: Record<string, string> = {
   Google: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   Microsoft: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',

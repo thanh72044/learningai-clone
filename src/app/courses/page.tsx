@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: 'Khám phá 50+ khóa học AI thực chiến từ cơ bản đến nâng cao.',
 };
 
+// Uses Supabase server client which accesses cookies (auth session)
+export const dynamic = 'force-dynamic';
+
 export default async function CoursesPage() {
   const courses = await getAllCourses();
 

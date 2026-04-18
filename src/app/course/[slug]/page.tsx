@@ -11,6 +11,9 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+// Uses Supabase server client which accesses cookies (auth session)
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const course = await getCourseBySlug(slug);

@@ -9,6 +9,9 @@ const ADMIN_NAV = [
   { href: '/', label: '← Về Trang Chủ', icon: '🏠' },
 ];
 
+// Uses Supabase server client (auth + admin check with getUserProfile())
+export const dynamic = 'force-dynamic';
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const profile = await getUserProfile();
   if (!profile || profile.role !== 'admin') {
