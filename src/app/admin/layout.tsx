@@ -11,7 +11,7 @@ const ADMIN_NAV = [
 
 // Uses Supabase server client (auth + admin check with getUserProfile())
 export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const profile = await getUserProfile();
