@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select('slug, updated_at')
     .eq('is_published', true);
 
-  const base = 'https://learningai-clone.vercel.app';
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://learningai.vn';
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: base, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },
