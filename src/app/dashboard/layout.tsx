@@ -11,6 +11,7 @@ const NAV_ITEMS = [
 
 // Uses Supabase server client (auth check with getUser())
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser();
