@@ -1,8 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-export const runtime = 'experimental-edge';
-
 /**
  * Middleware: refresh Supabase auth session on every request.
  * Also protects /dashboard and /admin routes.
