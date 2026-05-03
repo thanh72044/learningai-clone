@@ -3,10 +3,27 @@ import { getUser } from '@/lib/auth/get-user';
 import { getCourseBySlug, getLessonsByCourse } from '@/lib/db/courses';
 import { isEnrolled, enroll } from '@/lib/db/enrollments';
 import { getCourseProgress } from '@/lib/db/progress';
+import { getQuizzesByLessonIds } from '@/lib/db/quiz';
+import { createClient } from '@/lib/supabase/server';
 import { LessonList } from './lesson-list';
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+async function getQuizScoresByLesson(userId: string, lessonIds: string[]) {
+  if (lessonIds.length === 0) return {} as Record<string, { score: number; passed: boolean }>;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('quiz_scores')
+    .select('lesson_id, score_percent, passed')
+    .eq('user_id', userId)
+    .in('lesson_id', lessonIds);
+  const map: Record<string, { score: number; passed: boolean }> = {};
+  for (const row of data ?? []) {
+    map[row.lesson_id] = { score: row.score_percent, passed: row.passed };
+  }
+  return map;
 }
 
 export default async function DashboardCoursePage({ params }: Props) {
@@ -30,6 +47,12 @@ export default async function DashboardCoursePage({ params }: Props) {
   const [lessons, progress] = await Promise.all([
     getLessonsByCourse(course.id),
     getCourseProgress(user.id, course.id),
+  ]);
+
+  const lessonIds = lessons.map((l) => l.id);
+  const [quizLessonIds, scoreMap] = await Promise.all([
+    getQuizzesByLessonIds(lessonIds),
+    getQuizScoresByLesson(user.id, lessonIds),
   ]);
 
   return (
@@ -66,6 +89,8 @@ export default async function DashboardCoursePage({ params }: Props) {
         lessons={lessons}
         completedLessonIds={Array.from(progress.completedLessonIds)}
         courseId={course.id}
+        quizLessonIds={Array.from(quizLessonIds)}
+        quizScores={scoreMap}
       />
     </div>
   );

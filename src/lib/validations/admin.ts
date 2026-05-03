@@ -56,3 +56,23 @@ export type CreateLessonFormValues = z.infer<typeof createLessonSchema>;
 export const updateLessonSchema = createLessonSchema.omit({ course_id: true });
 
 export type UpdateLessonFormValues = z.infer<typeof updateLessonSchema>;
+
+/** Quiz option (client-submitted) */
+export const quizOptionSchema = z.object({
+  option_text: z.string().min(1, 'Đáp án không được để trống'),
+  is_correct: z.boolean(),
+});
+
+/** Quiz question with inline options — min 2 options, at least 1 correct */
+export const quizQuestionSchema = z.object({
+  lesson_id: z.string().uuid('Lesson ID không hợp lệ'),
+  question_text: z.string().min(1, 'Câu hỏi không được để trống'),
+  explanation: z.string().optional().or(z.literal('')),
+  sort_order: z.coerce.number().int().nonnegative().default(0),
+  options: z
+    .array(quizOptionSchema)
+    .min(2, 'Phải có ít nhất 2 đáp án')
+    .refine((opts) => opts.some((o) => o.is_correct), 'Phải có ít nhất 1 đáp án đúng'),
+});
+
+export type QuizQuestionFormValues = z.infer<typeof quizQuestionSchema>;
